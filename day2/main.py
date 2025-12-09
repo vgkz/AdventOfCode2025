@@ -1,5 +1,3 @@
-x = "11-22,95-115,998-1012,1188511880-1188511890,222220-222224,1698522-1698528,446443-446449,38593856-38593862,565653-565659,824824821-824824827,2121212118-2121212124"
-
 def checkValidity(inputId : str) -> bool:
     idLen = len(inputId)
     if (idLen % 2) != 0:
@@ -22,7 +20,13 @@ def extractIds(inputString : str) -> list[str]:
     values = flatten(nestedValues) 
     return [str(v) for v in values]
 
+def main():
+    with open("data.txt") as h:
+        data = h.read()
+    ids = extractIds(data)
+    incorrectIds = [i for i in ids if not checkValidity(i)]
+    print(sum([int(i) for i in incorrectIds]))
 
-ids = extractIds(x)
-incorrectIds = [i for i in ids if not checkValidity(i)]
-print(sum([int(i) for i in incorrectIds]))
+
+if __name__ == "__main__":
+    main()
