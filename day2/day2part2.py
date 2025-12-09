@@ -1,11 +1,11 @@
 def checkValidity(inputId : str) -> bool:
     idLen = len(inputId)
-    if (idLen % 2) != 0:
-        return True
-    else:
-        headHalf = inputId[:idLen//2]
-        tailHalf = inputId[idLen//2:]
-        return not (headHalf == tailHalf)
+    sequencesToCheck = [inputId[:i] for i in range(1,idLen//2+1)]
+    for seq in sequencesToCheck:
+        splitId = inputId.split(seq)
+        if len([split for split in splitId if split != ""]) == 0:
+            return False
+    return True
 
 def strToRange(inputString : str) -> range:
     init, end = inputString.split("-")
