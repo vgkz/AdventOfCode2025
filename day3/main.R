@@ -17,6 +17,8 @@ max_joltage <- function(batteries) {
          remaining_batteries[i_snd_max_joltage_battery])
 }
 
-Map(function(x) (max_joltage(split_bank(x))), input) |>
+data <- scan("data.txt", what = "character")
+
+Map(function(x) (max_joltage(split_bank(x))), data) |>
   as.integer() |>
   sum()
