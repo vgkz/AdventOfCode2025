@@ -24,19 +24,18 @@ max_joltage <- function(remaining_bats, selected_bats, n_bats_left) {
   }
 }
 
-# read input ata from txt
+# read input data from txt
 data <- scan("data.txt", what = "character")
 
-#### solve task adn print to console ####
-
+#### solve task and print to console ####
 # part 1
 Map(function(x) (max_joltage(split_bank(x), c(), 1)), data) |>
-    as.numeric() |>
-    sum() |>
-    format(scientific = FALSE)
+  as.numeric() |>
+  sum() |>
+  format(scientific = FALSE)
 
 # part 2
 Map(function(x) (max_joltage(split_bank(x), c(), 11)), data) |>
-    as.numeric() |>
-    sum() |>
-    format(scientific = FALSE)
+  as.numeric() |>
+  sum() |>
+  format(scientific = FALSE)
