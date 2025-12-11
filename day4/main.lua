@@ -83,4 +83,14 @@ test_input = {"..@@.@@@@.",
 
 test_input = splitTable(test_input)
 
-print(countAccessableRolls(test_input))
+-- solve part 1
+do
+    local file = "data.txt"
+    local lines = {}
+    for line in io.lines(file) do
+        lines[#lines+1] = line
+    end
+    local puzzle_input = splitTable(lines)
+    local count = countAccessableRolls(puzzle_input)
+    print(count)
+end
