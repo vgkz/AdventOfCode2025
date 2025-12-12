@@ -70,6 +70,33 @@ function countAccessableRolls(t)
     return count
 end
 
+function findAccessableRolls(t)
+    local max_x = tableLength(t[1])
+    local max_y = tableLength(t)
+    local accessable_rolls = {}
+    for y, row in ipairs(t) do
+        for x, val in ipairs(row) do
+            if val == "@"
+                then
+                local c = countNeighbors(t, y, x, max_x, max_y)
+                if c < 4
+                    then
+                        table.insert(accessable_rolls, {x, y})
+                end
+            end
+        end
+    end
+    return accessable_rolls
+end
+
+function removeAccessableRolls(t, accessable_rolls)
+    for i, coord in ipairs(accessable_rolls) do
+        t[coord[2]][coord[1]] = "."
+    end
+    return t
+end
+
+
 test_input = {"..@@.@@@@.",
               "@@@.@.@.@@",
               "@@@@@.@.@@",
@@ -92,5 +119,30 @@ do
     end
     local puzzle_input = splitTable(lines)
     local count = countAccessableRolls(puzzle_input)
+    print(count)
+end
+
+-- solve part 2
+do
+    --local file = "data.txt"
+    --local lines = {}
+    --for line in io.lines(file) do
+        --lines[#lines+1] = line
+    --end
+    --local puzzle_input = splitTable(lines)
+    local in_loop = true
+    local count = 0
+    while in_loop == true do
+        local accs_rolls = findAccessableRolls(test_input)
+        count = count + tableLength(accs_rolls)
+        test_input = removeAccessableRolls(test_input, accs_rolls)
+        if tableLength(accs_rolls) == 0
+            then
+                in_loop = false
+        end
+    end
+    for i, row in ipairs(test_input) do
+        print(table.concat(row, ""))
+    end
     print(count)
 end
