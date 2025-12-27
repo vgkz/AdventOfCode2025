@@ -70,7 +70,7 @@ fn connect_until_joined(input: &Vec<[i32;3]>) -> Option<(usize, usize)>{
     // compute distances and sort
     let mut dist_pairs = find_distance_pairs(&input);
     dist_pairs.sort_by(|a,b| a.1.partial_cmp(&b.1).unwrap());
-    // connect circuits until n_connections made
+    // connect circuits until one circuit remains
     for (min_pair, _dist) in &mut dist_pairs {
         circuits = update_sets(circuits, *min_pair);
         if circuits.len() == 1 {
