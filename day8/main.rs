@@ -3,31 +3,7 @@ use std::collections::HashMap;
 use std::fs;
 use std::convert::TryInto;
 
-const TEST_INPUT: [[i32; 3]; 20] = [
-    [162,817,812],
-    [57,618,57],
-    [906,360,560],
-    [592,479,940],
-    [352,342,300],
-    [466,668,158],
-    [542,29,236],
-    [431,825,988],
-    [739,650,466],
-    [52,470,668],
-    [216,146,977],
-    [819,987,18],
-    [117,168,530],
-    [805,96,715],
-    [346,949,466],
-    [970,615,88],
-    [941,993,340],
-    [862,61,35],
-    [984,92,344],
-    [425,690,689]
-    ];
-
 fn main() {
-    //let test_vect = Vec::from(&TEST_INPUT);
     // read data
     let data = fs::read_to_string("data.txt")
         .expect("failed to read");
@@ -37,6 +13,15 @@ fn main() {
     let sizes = get_n_largest_circuit_sizes(&set_map, 3);
     let prod = &sizes.iter().fold(1, |acc, x| acc*x);
     println!("{prod}");
+    // solve part 2
+    if let Some(final_pair) = connect_until_joined(&input) {
+        let f1 = input[final_pair.0];
+        let f2 = input[final_pair.1];
+        let dist = f1[0]*f2[0];
+        println!("{dist}");
+    } else {
+        println!("failed to find final joining pair");
+    }
 }
 
 fn process_data(data: String) -> Vec<[i32;3]>{
@@ -74,6 +59,27 @@ fn connect_circuits(input: &Vec<[i32;3]>, target_n_connections: usize) -> HashMa
     }
     circuits
 }
+
+fn connect_until_joined(input: &Vec<[i32;3]>) -> Option<(usize, usize)>{
+    // initialize circuits
+    let mut circuits: HashMap<usize, HashSet<usize>> = HashMap::new();
+    for i in 0..input.len() {
+        let set: HashSet<usize> = HashSet::from([i]);
+        circuits.insert(i+1, set);
+    }
+    // compute distances and sort
+    let mut dist_pairs = find_distance_pairs(&input);
+    dist_pairs.sort_by(|a,b| a.1.partial_cmp(&b.1).unwrap());
+    // connect circuits until n_connections made
+    for (min_pair, _dist) in &mut dist_pairs {
+        circuits = update_sets(circuits, *min_pair);
+        if circuits.len() == 1 {
+            return Some(*min_pair)
+        }
+    }
+    None
+}
+
 
 fn update_sets(mut set_map: HashMap<usize, HashSet<usize>>, min_pair: (usize, usize)) -> HashMap<usize, HashSet<usize>>{
     let mut index0_set: usize = 0;
